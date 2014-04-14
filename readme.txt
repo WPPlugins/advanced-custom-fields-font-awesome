@@ -1,4 +1,4 @@
-=== Advanced Custom Fields: Font Awesome Field ===
+=== Advanced Custom Fields: Font Awesome ===
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
@@ -44,7 +44,15 @@ function my_register_fields()
 }
 `
 
+== Screenshots ==
+
+1. Set a default icon, and choose how you want icon data to be returned.
+2. Searchable list of all icons, including large live preview
+
 == Changelog ==
+
+= 1.1.1 =
+* Fixed JS error which was breaking conditional field select boxes
 
 = 1.1.0 =
 * Added support for use in repeater fields
@@ -56,6 +64,9 @@ function my_register_fields()
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+This version fixes a JS error caused by 1.1.0 that was causing issues with conditional field select boxes.
 
 = 1.1.0 =
 This version adds support for use in repeater fields and flexible content fields, and also fixes some small bugs.
