@@ -3,7 +3,7 @@ Contributors: mattkeys
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UTNU7YJG2KVPJ
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 3.9
+Tested up to: 4.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -37,6 +37,9 @@ This ACF field type is compatible with:
 
 == Changelog ==
 
+= 1.4 =
+* Updated included FontAwesome to version 4.2
+
 = 1.3 =
 * Added support for ACF version 5.x
 
@@ -60,6 +63,9 @@ This ACF field type is compatible with:
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 1.4 =
+* Updated included FontAwesome to version 4.2 (40 more icons)
 
 = 1.3 =
 Advanced Custom Fields version 5.x support
