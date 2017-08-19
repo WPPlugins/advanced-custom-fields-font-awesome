@@ -36,14 +36,15 @@
 
 	acf.add_action( 'append', function( $el ) {
 
-		// Display Field Groups
-		var $fa_fields = $el;
+		if ( $( 'select.fontawesome-edit', $el ).length ) {
+			var $fa_fields = $el;
 
-		$fa_fields.each( function( index, fa_field ) {
-			update_preview( $( 'select', fa_field ).val(), fa_field );
+			$fa_fields.each( function( index, fa_field ) {
+				update_preview( $( 'select', fa_field ).val(), fa_field );
 
-			acf.select2.init( $( 'select', fa_field ), select2_init_args( fa_field ), $( fa_field ) );
-		});
+				acf.select2.init( $( 'select', fa_field ), select2_init_args( fa_field ), $( fa_field ) );
+			});
+		}
 	});
 
 	acf.add_filter( 'select2_args', function( args, $select, settings, $field ) {

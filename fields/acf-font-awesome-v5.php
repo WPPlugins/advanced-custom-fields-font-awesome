@@ -66,6 +66,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				'choices'		=>	$field['choices'],
 				'placeholder'	=> 'Choose a default icon (optional)',
 				'ui'			=> 1,
+				'allow_null'	=> 1,
 				'ajax'			=> 1,
 				'ajax_action'	=> 'acf/fields/font-awesome/query'
 			));

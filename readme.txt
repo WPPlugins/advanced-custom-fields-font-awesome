@@ -46,6 +46,10 @@ This ACF field type is compatible with:
 
 == Changelog ==
 
+= 2.0.1 =
+* Fixed bug causing incompatibilities with ACF Clone fields (ACF v5)
+* Fixed bug where default icons could not be unselected when creating FontAwesome fields (ACF v5)
+
 = 2.0.0 =
 * Total rewrite of plugin to simplify codebase and better adhere to WordPress and Advanced Custom Fields coding standards and best practices
 * Added option to disable the larger icon preview displayed with the FontAwesome select fields
@@ -119,6 +123,10 @@ This ACF field type is compatible with:
 
 
 == Upgrade Notice ==
+
+= 2.0.1 =
+* Fixed bug causing incompatibilities with ACF Clone fields (ACF v5)
+* Fixed bug where default icons could not be unselected when creating FontAwesome fields (ACF v5)
 
 = 2.0.0 =
 * Total rewrite of plugin to simplify codebase and better adhere to WordPress and Advanced Custom Fields coding standards and best practices
