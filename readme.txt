@@ -2,7 +2,7 @@
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 3.8.1
+Tested up to: 4.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ Add a [Font Awesome](http://fontawesome.io/) icon field type to Advanced Custom 
 * Returns Icon Element, Icon Class, Icon Unicode, or an Object including the element, class, and unicode value
 * Optionally enqueues Font Awesome in footer where needed (when a font awesome field is being used on the page)
 * Integrates with [jsDelivr](https://www.jsdelivr.com/) to automatically load the latest version of [Font Awesome](http://fontawesome.io/)
-* Includes filters to override the which version of FontAwesome is loaded
+* Includes filters to override the which version of FontAwesome is loaded (See Optional Configuration)
 
 Note: It is recommended to let this plugin enqueue the latest version of Font Awesome on your front-end; or include the latest version by some other means; so that available icons in the admin area will be displayed properly on your sites front-end.
 
@@ -32,7 +32,6 @@ This ACF field type is compatible with:
 1. Copy the `advanced-custom-fields-font-awesome` folder into your `wp-content/plugins` folder
 2. Activate the Font Awesome plugin via the plugins admin page
 3. Create a new field via ACF and select the Font Awesome type
-4. Please refer to the description for more info regarding the field type settings
 
 == Optional Configuration ==
 
@@ -44,7 +43,15 @@ This ACF field type is compatible with:
 * **ACFFA_get_icons**: Filter the array of icons and icon details loaded from the database
 * **ACFFA_get_fa_url**: Filter the URL used for enqueuing FontAwesome in the frontend and admin areas of the site.
 
+== Screenshots ==
+
+1. Set a default icon, and choose how you want icon data to be returned.
+2. Searchable list of all icons, including large live preview
+
 == Changelog ==
+
+= 2.0.2 =
+* Fixed bug effecting Select fields when used along with a Font Awesome field in a repeater (ACF v5)
 
 = 2.0.1 =
 * Fixed bug causing incompatibilities with ACF Clone fields (ACF v5)
@@ -53,7 +60,6 @@ This ACF field type is compatible with:
 = 2.0.0 =
 * Total rewrite of plugin to simplify codebase and better adhere to WordPress and Advanced Custom Fields coding standards and best practices
 * Added option to disable the larger icon preview displayed with the FontAwesome select fields
-* Fixed incompatibilities when using this plugin alongside WooCommerce
 
 = 1.7.4 =
 * Fixed incompatibilities with latest ACF 5 + Select2 v4.x
@@ -121,8 +127,10 @@ This ACF field type is compatible with:
 = 1.0.0 =
 * Initial Release.
 
-
 == Upgrade Notice ==
+
+= 2.0.2 =
+* Fixed bug effecting Select fields when used along with a Font Awesome field in a repeater (ACF v5)
 
 = 2.0.1 =
 * Fixed bug causing incompatibilities with ACF Clone fields (ACF v5)
@@ -131,4 +139,3 @@ This ACF field type is compatible with:
 = 2.0.0 =
 * Total rewrite of plugin to simplify codebase and better adhere to WordPress and Advanced Custom Fields coding standards and best practices
 * Added option to disable the larger icon preview displayed with the FontAwesome select fields
-* Fixed incompatibilities when using this plugin alongside WooCommerce

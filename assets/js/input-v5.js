@@ -1,7 +1,6 @@
 (function($){
 	
 	function update_preview( value, parent ) {
-		// v5
 		$( '.acf-field-setting-fa_live_preview .acf-input', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
 		$( '.icon_preview', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
 	}
@@ -40,9 +39,9 @@
 			var $fa_fields = $el;
 
 			$fa_fields.each( function( index, fa_field ) {
-				update_preview( $( 'select', fa_field ).val(), fa_field );
+				update_preview( $( 'select.fontawesome-edit', fa_field ).val(), fa_field );
 
-				acf.select2.init( $( 'select', fa_field ), select2_init_args( fa_field ), $( fa_field ) );
+				acf.select2.init( $( 'select.fontawesome-edit', fa_field ), select2_init_args( fa_field ), $( fa_field ) );
 			});
 		}
 	});
