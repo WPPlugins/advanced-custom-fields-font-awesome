@@ -1,8 +1,9 @@
 (function($){
 	
 	function update_preview( value, parent ) {
-		$( '.acf-field-setting-fa_live_preview .acf-input', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
-		$( '.icon_preview', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
+		var class_prefix = ( ACFFA.major_version >= 5 ) ? '' : 'fa ';
+		$( '.acf-field-setting-fa_live_preview .acf-input', parent ).html( '<i class="' + class_prefix + value + '" aria-hidden="true"></i>' );
+		$( '.icon_preview', parent ).html( '<i class="' + class_prefix + value + '" aria-hidden="true"></i>' );
 	}
 
 	function select2_init_args( element, parent ) {
@@ -33,8 +34,8 @@
 	acf.add_filter( 'select2_args', function( args, $select, settings, $field ) {
 
 		if ( $select.hasClass('select2-fontawesome') ) {
-			args.dropdownCssClass = 'fa-select2-drop';
-			args.containerCssClass = 'fa-select2';
+			args.dropdownCssClass = 'fa-select2-drop fa' + ACFFA.major_version;
+			args.containerCssClass = 'fa-select2 fa' + ACFFA.major_version;
 		}
 
 		return args;

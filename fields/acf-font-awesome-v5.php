@@ -25,7 +25,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				'save_format'		=>  'element',
 				'default_value'		=>	'',
 				'fa_live_preview'	=>	'',
-				'choices'			=>	$this->get_icons('list')
+				'choices'			=>	array()
 			);
 
 			parent::__construct();
@@ -131,6 +131,8 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			} else {
 				$select_value = ( 'null' != $field['value'] ) ? $field['value'] : $field['default_value'];
 			}
+
+			$select2_class = version_compare( ACFFA_MAJOR_VERSION, 5, '>=' ) ? 'fa5' : 'fa4';
 			?>
 			<input type="hidden" id="<?php echo $field['id']; ?>-input" name="<?php echo $field['name']; ?>" value="<?php echo $select_value; ?>">
 
@@ -138,15 +140,37 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				<div class="icon_preview"></div>
 			<?php endif; ?>
 
-			<select id="<?php echo $field['id']; ?>" class="select2-fontawesome fontawesome-edit" name="<?php echo esc_attr($field['name']) ?>" data-ui="1" data-ajax="1" data-multiple="0" data-placeholder="- Select -" data-allow_null="<?php echo $field['allow_null']; ?>">
+			<select id="<?php echo $field['id']; ?>" class="<?php echo $select2_class; ?> select2-fontawesome fontawesome-edit" name="<?php echo esc_attr($field['name']) ?>" data-ui="1" data-ajax="1" data-multiple="0" data-placeholder="- Select -" data-allow_null="<?php echo $field['allow_null']; ?>">
 				<?php
 					$icons = $this->get_icons('list');
-					if ( $icons ) :
-						foreach ( $icons as $value => $label ) :
+
+					if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) :
+						if ( $select_value && isset( $icons[ $select_value ] ) ) :
 							?>
-							<option value="<?php echo $value; ?>" <?php selected( $select_value, $value ); ?>><?php echo $label; ?></option>
+							<option value="<?php echo $select_value; ?>" selected="selected"><?php echo $icons[ $select_value ]; ?></option>
 							<?php
-						endforeach;
+						elseif ( ( ! $select_value || ! isset( $icons[ $select_value ] ) ) && ! $field['allow_null'] ) :
+							$default_value = reset( $icons );
+							$default_key = key( $icons );
+							?>
+							<option value="<?php echo $default_key; ?>" selected="selected"><?php echo $default_value; ?></option>
+							<?php
+						endif;
+					else :
+						$prefix = substr( $select_value, 0, 3 );
+						if ( $select_value && isset( $icons[ $prefix ][ $select_value ] ) ) :
+							?>
+							<option value="<?php echo $select_value; ?>" selected="selected"><?php echo htmlentities( $icons[ $prefix ][ $select_value ] ); ?></option>
+							<?php
+						elseif ( ( ! $select_value || ! isset( $icons[ $prefix ][ $select_value ] ) ) && ! $field['allow_null'] ) :
+							$default_style_value = reset( $icons );
+							$default_style_key = key( $icons );
+							$default_value = reset( $default_style_value );
+							$default_key = key( $default_style_value );
+							?>
+							<option value="<?php echo $default_key; ?>" selected="selected"><?php echo $default_value; ?></option>
+							<?php
+						endif;
 					endif;
 				?>
 			</select>
@@ -159,6 +183,9 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			$version = $this->settings['version'];
 			
 			wp_register_script( 'acf-input-font-awesome', "{$url}assets/js/input-v5.js", array('acf-input'), $version );
+			wp_localize_script( 'acf-input-font-awesome', 'ACFFA', array(
+				'major_version' => ACFFA_MAJOR_VERSION
+			));
 			wp_enqueue_script('acf-input-font-awesome');
 
 			wp_register_style( 'acf-input-font-awesome', "{$url}assets/css/input.css", array('acf-input'), $version );
@@ -195,16 +222,44 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				return $value;
 			}
 
-			if ( isset( $this->icons['details'][ $value ] ) ) {
+			if ( ! $this->icons ) {
+				$this->get_icons();
+			}
+
+			if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) {
+				$icon = isset( $this->icons['details'][ $value ] ) ? $this->icons['details'][ $value ] : false;
+			} else {
+				$prefix = substr( $value, 0, 3 );
+				$icon = isset( $this->icons['details'][ $prefix ][ $value ] ) ? $this->icons['details'][ $prefix ][ $value ] : false;
+			}
+
+			if ( $icon ) {
 				switch ( $field['save_format'] ) {
 					case 'element':
-					case 'class':
+						if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) {
+							$value = '<i class="fa ' . $value . '" aria-hidden="true"></i>';
+						} else {
+							$value = '<i class="' . $value . '" aria-hidden="true"></i>';
+						}
+						break;
+
 					case 'unicode':
-						$value = $this->icons['details'][ $value ][ $field['save_format'] ];
+						$value = $icon['unicode'];
 						break;
 
 					case 'object':
-						$value = ( object ) $this->icons['details'][ $value ];
+						$object_data = array(
+							'element' => '<i class="' . $value . '" aria-hidden="true"></i>',
+							'class' => $value,
+							'hex' => $icon['hex'],
+							'unicode' => $icon['unicode']
+						);
+
+						if ( version_compare( ACFFA_MAJOR_VERSION, 5, '>=' ) ) {
+							$object_data['prefix'] = $prefix;
+						}
+
+						$value = ( object ) $object_data;
 						break;
 				}
 			}

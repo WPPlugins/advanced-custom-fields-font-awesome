@@ -1,15 +1,16 @@
 (function($){
-	
+
 	function update_preview( $select_element, parent ) {
-		var value = $select_element.val();
+		var value			= $select_element.val(),
+			class_prefix	= ( ACFFA.major_version >= 5 ) ? '' : 'fa ';
 
 		if ( ! parent ) {
 			var parent = $select_element.closest('.field');
 		}
 
-		$( '.icon_preview', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
+		$( '.icon_preview', parent ).html( '<i class="' + class_prefix + value + '" aria-hidden="true"></i>' );
 
-		$( '.field_option_font-awesome .fa_live_preview', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
+		$( '.field_option_font-awesome .fa_live_preview', parent ).html( '<i class="' + class_prefix + value + '" aria-hidden="true"></i>' );
 	}
 
 	function initialize_chosen( $select, allow_deselect ) {
@@ -17,7 +18,8 @@
 			width					: '100%',
 			no_results_text			: ACFFA.no_results,
 			rtl						: ACFFA.is_rtl,
-			allow_single_deselect	: allow_deselect
+			allow_single_deselect	: allow_deselect,
+			inherit_select_classes	: true
 		});
 	}
 

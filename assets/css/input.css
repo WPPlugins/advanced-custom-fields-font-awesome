@@ -13,9 +13,38 @@
 	margin: 0 0 10px 0;
 }
 
-.field_option_font-awesome .chosen-container,
-.field_type-font-awesome .chosen-container,
-.fa-select2,
-.fa-select2-drop {
+.field_option_font-awesome .chosen-container.fa4,
+.field_type-font-awesome .chosen-container.fa4,
+.fa-select2.fa4,
+.fa-select2-drop.fa4 {
 	font-family: FontAwesome,-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.field_option_font-awesome .chosen-container.fa5,
+.field_type-font-awesome .chosen-container.fa5,
+.fa-select2.fa5,
+.fa-select2-drop.fa5 {
+	font-family: "Font Awesome 5 Brands","Font Awesome 5 Free",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.fa-select2.fa5 i.fas,
+.fa-select2-drop.fa5 i.fas {
+	font-weight: 900;
+}
+
+.field_option_font-awesome .chosen-container.fa5 .chosen-results li,
+.field_type-font-awesome .chosen-container.fa5 .chosen-results li {
+	font-weight: normal;
+}
+
+.field_option_font-awesome .chosen-container.fa5 .chosen-results li.fas:before,
+.field_type-font-awesome .chosen-container.fa5 .chosen-results li.fas:before {
+	font-weight: 900;
+}
+
+.field_option_font-awesome .chosen-container.fa5 .chosen-results li:before,
+.field_type-font-awesome .chosen-container.fa5 .chosen-results li:before {
+	display: inline-block;
+	width: 20px;
+	text-align: center;
 }

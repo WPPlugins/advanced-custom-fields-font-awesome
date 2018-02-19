@@ -31,7 +31,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				'save_format'		=>  'element',
 				'default_value'		=>	'',
 				'fa_live_preview'	=>	'',
-				'choices'			=>	$this->get_icons('list')
+				'choices'			=>	array()
 			);
 
 	    	parent::__construct();
@@ -193,15 +193,34 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				<div class="icon_preview"></div>
 			<?php endif; ?>
 
-			<select id="<?php echo $field['id']; ?>" class="chosen-fontawesome fontawesome-edit" name="<?php echo esc_attr($field['name']) ?>" data-ui="1" data-ajax="1" data-multiple="0" data-placeholder="- Select -" data-allow_null="<?php echo $field['allow_null']; ?>">
+			<select id="<?php echo $field['id']; ?>" class="chosen-fontawesome fontawesome-edit fa<?php echo ACFFA_MAJOR_VERSION; ?>" name="<?php echo esc_attr($field['name']) ?>" data-ui="1" data-ajax="1" data-multiple="0" data-placeholder="- Select -" data-allow_null="<?php echo $field['allow_null']; ?>">
 				<?php
 					$icons = $this->get_icons('list');
+
 					if ( $icons ) :
-						foreach ( $icons as $value => $label ) :
-							?>
-							<option value="<?php echo $value; ?>" <?php selected( $select_value, $value ); ?>><?php echo $label; ?></option>
-							<?php
-						endforeach;
+						if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) :
+							foreach ( $icons as $value => $label ) :
+								?>
+								<option value="<?php echo $value; ?>" <?php selected( $select_value, $value ); ?>><?php echo $label; ?></option>
+								<?php
+							endforeach;
+						else :
+							foreach ( $icons as $prefix => $children ) :
+								$prefix_label = apply_filters( 'ACFFA_icon_prefix_label', 'Regular', $prefix );
+								?>
+								<optgroup label="<?php echo $prefix_label; ?>"><?php echo $prefix_label; ?>
+								<?php
+									foreach ( $children as $value => $label ) :
+										$label = explode( '; ', strip_tags( $label ) );
+										?>
+										<option class="<?php echo $value; ?>" value="<?php echo $value; ?>" style=""<?php selected( $select_value, $value ); ?>><?php echo $label[1]; ?></option>
+										<?php
+									endforeach;
+								?>
+								</optgroup>
+								<?php
+							endforeach;
+						endif;
 					endif;
 				?>
 			</select>
@@ -234,7 +253,8 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				'chosen'		=> apply_filters( 'ACFFA_load_chosen', true ),
 				'nonce'			=> wp_create_nonce( 'ACFFA_nonce' ),
 				'is_rtl'		=> is_rtl(),
-				'no_results'	=> __( 'Cannot find icon', 'acf-font-awesome' ) . ' : '
+				'no_results'	=> __( 'Cannot find icon', 'acf-font-awesome' ) . ' : ',
+				'major_version'	=> ACFFA_MAJOR_VERSION
 			));
 
 			wp_register_style( 'acf-input-font-awesome', "{$url}assets/css/input.css", $dependencies, $version );
@@ -271,16 +291,46 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 				return $value;
 			}
 
-			switch ( $field['save_format'] ) {
-				case 'element':
-				case 'class':
-				case 'unicode':
-					$value = $this->icons['details'][ $value ][ $field['save_format'] ];
-					break;
+			if ( ! $this->icons ) {
+				$this->get_icons();
+			}
 
-				case 'object':
-					$value = ( object ) $this->icons['details'][ $value ];
-					break;
+			if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) {
+				$icon = isset( $this->icons['details'][ $value ] ) ? $this->icons['details'][ $value ] : false;
+			} else {
+				$prefix = substr( $value, 0, 3 );
+				$icon = isset( $this->icons['details'][ $prefix ][ $value ] ) ? $this->icons['details'][ $prefix ][ $value ] : false;
+			}
+
+			if ( $icon ) {
+				switch ( $field['save_format'] ) {
+					case 'element':
+						if ( version_compare( ACFFA_MAJOR_VERSION, 5, '<' ) ) {
+							$value = '<i class="fa ' . $value . '" aria-hidden="true"></i>';
+						} else {
+							$value = '<i class="' . $value . '" aria-hidden="true"></i>';
+						}
+						break;
+
+					case 'unicode':
+						$value = $icon['unicode'];
+						break;
+
+					case 'object':
+						$object_data = array(
+							'element' => '<i class="' . $value . '" aria-hidden="true"></i>',
+							'class' => $value,
+							'hex' => $icon['hex'],
+							'unicode' => $icon['unicode']
+						);
+
+						if ( version_compare( ACFFA_MAJOR_VERSION, 5, '>=' ) ) {
+							$object_data['prefix'] = $prefix;
+						}
+
+						$value = ( object ) $object_data;
+						break;
+				}
 			}
 
 			return $value;
