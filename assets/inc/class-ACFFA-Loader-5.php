@@ -15,25 +15,48 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class ACFFA_Loader_5
 {
-	public $api_endpoint		= 'https://data.jsdelivr.com/v1/package/resolve/gh/FortAwesome/Font-Awesome@5';
-	public $cdn_baseurl			= 'https://cdn.jsdelivr.net/gh/FortAwesome/Font-Awesome@';
-	public $free_icon_manifest	= '/advanced-options/metadata/icons.yml';
-	public $cdn_filepath		= '/web-fonts-with-css/css/fontawesome-all.min.css';
-	public $override_version	= false;
-	public $current_version		= false;
+	private $api_endpoint		= false;
+	private $free_api_endpoint	= 'https://data.jsdelivr.com/v1/package/resolve/gh/mattkeys/FontAwesome-Free-Manifest@5';
+	private $pro_api_endpoint	= 'https://data.jsdelivr.com/v1/package/resolve/gh/mattkeys/FontAwesome-Pro-Manifest@5';
+	private $cdn_baseurl		= false;
+	private $free_cdn_baseurl	= 'https://use.fontawesome.com/releases/v';
+	private $pro_cdn_baseurl	= 'https://pro.fontawesome.com/releases/v';
+	private $manifest_url		= false;
+	private $free_manifest_url	= 'http://cdn.jsdelivr.net/gh/mattkeys/FontAwesome-Free-Manifest/5.x/manifest.yml';
+	private $pro_manifest_url	= 'http://cdn.jsdelivr.net/gh/mattkeys/FontAwesome-Pro-Manifest/5.x/manifest.yml';
+	private $cdn_filepath		= '/css/all.css';
+	private $override_version	= false;
+	private $current_version	= false;
+	private $pro_icons_enabled	= false;
+	private $active_icon_set	= false;
 
 	public function init()
 	{
+		$acffa_settings				= get_option( 'acffa_settings' );
+		$this->pro_icons_enabled	= isset( $acffa_settings['acffa_pro_cdn'] ) ? true : false;
+
+		if ( $this->pro_icons_enabled ) {
+			$this->api_endpoint = $this->pro_api_endpoint;
+			$this->cdn_baseurl	= $this->pro_cdn_baseurl;
+			$this->manifest_url	= $this->pro_manifest_url;
+		} else {
+			$this->api_endpoint = $this->free_api_endpoint;
+			$this->cdn_baseurl	= $this->free_cdn_baseurl;
+			$this->manifest_url	= $this->free_manifest_url;
+		}
+
 		$this->api_endpoint		= apply_filters( 'ACFFA_api_endpoint', $this->api_endpoint );
 		$this->cdn_baseurl		= apply_filters( 'ACFFA_cdn_baseurl', $this->cdn_baseurl );
+		$this->manifest_url		= apply_filters( 'ACFFA_manifest_url', $this->manifest_url );
 		$this->cdn_filepath		= apply_filters( 'ACFFA_cdn_filepath', $this->cdn_filepath );
 		$this->override_version	= apply_filters( 'ACFFA_override_version', false );
 
 		$this->current_version	= get_option( 'ACFFA_current_version' );
+		$this->active_icon_set	= get_option( 'ACFFA_active_icon_set' );
 
 		if ( $this->override_version ) {
 			$this->current_version = $this->override_version;
-		} else if ( ! $this->current_version || version_compare( $this->current_version, '5.0.0', '<' )  ) {
+		} else if ( ! $this->current_version || version_compare( $this->current_version, '5.0.0', '<' ) || ! $this->active_icon_set || ( $this->pro_icons_enabled && 'pro' !== $this->active_icon_set ) || ( ! $this->pro_icons_enabled && 'free' !== $this->active_icon_set ) ) {
 			$this->current_version = $this->check_latest_version();
 		}
 
@@ -122,7 +145,7 @@ class ACFFA_Loader_5
 			return;
 		}
 
-		if ( version_compare( $this->current_version, $latest_version, '<' ) ) {
+		if ( version_compare( $this->current_version, $latest_version, '<' ) || ! $this->active_icon_set || ( $this->pro_icons_enabled && 'pro' !== $this->active_icon_set ) || ( ! $this->pro_icons_enabled && 'free' !== $this->active_icon_set ) ) {
 			update_option( 'ACFFA_current_version', $latest_version, false );
 			$this->current_version = $latest_version;
 
@@ -132,7 +155,7 @@ class ACFFA_Loader_5
 
 	private function check_latest_version( $update_option = true )
 	{
-		$latest_version = 'latest';
+		$latest_version = false;
 
 		$remote_get = wp_remote_get( $this->api_endpoint );
 
@@ -166,11 +189,10 @@ class ACFFA_Loader_5
 	{
 		$fa_icons = get_option( 'ACFFA_icon_data' );
 
-		if ( empty( $fa_icons ) || ! isset( $fa_icons[ $this->current_version ] ) ) {
-			$request_url	= $this->cdn_baseurl . $this->current_version . $this->free_icon_manifest;
-			$remote_get		= wp_remote_get( $request_url );
+		if ( empty( $fa_icons ) || ! isset( $fa_icons[ $this->current_version ] ) || ! $this->active_icon_set || ( $this->pro_icons_enabled && 'pro' !== $this->active_icon_set ) || ( ! $this->pro_icons_enabled && 'free' !== $this->active_icon_set ) ) {
+			$remote_get		= wp_remote_get( $this->manifest_url );
 
-			if ( ! is_wp_error( $remote_get ) ) {
+			if ( ! is_wp_error( $remote_get ) && isset( $remote_get['response']['code'] ) && '200' == $remote_get['response']['code'] ) {
 				$response = wp_remote_retrieve_body( $remote_get );
 
 				if ( ! empty( $response ) ) {
@@ -185,10 +207,15 @@ class ACFFA_Loader_5
 								$this->current_version => $icons
 							);
 
+							$active_set = ( $this->pro_icons_enabled ) ? 'pro' : 'free';
+
 							update_option( 'ACFFA_icon_data', $fa_icons, true );
+							update_option( 'ACFFA_active_icon_set', $active_set, true );
 						}
 					}
 				}
+			} else {
+				// There was an error getting the icons, maybe CDN not enabled for Pro? Or CDN down?
 			}
 		}
 
@@ -207,8 +234,8 @@ class ACFFA_Loader_5
 	private function find_icons( $manifest )
 	{
 		$icons = array(
-			'list' => array(),
-			'details' => array()
+			'list'		=> array(),
+			'details'	=> array()
 		);
 
 		foreach ( $manifest as $icon => $details ) {

@@ -44,6 +44,7 @@ class ACFFA_Admin
 	{
 		if ( isset( $_GET['settings-updated'] ) ) {
 			add_settings_error( 'acffa_messages', 'acffa_message', __( 'Settings Saved', 'acf-font-awesome' ), 'updated' );
+			do_action( 'ACFFA_refresh_latest_icons' );
 		}
 
 		settings_errors( 'acffa_messages' );
@@ -81,8 +82,20 @@ class ACFFA_Admin
 			'acffa',
 			'acffa_section_developers',
 			array(
-				'label_for'			=> 'acffa_major_version',
-				'class'				=> 'acffa_row'
+				'label_for'	=> 'acffa_major_version',
+				'class'		=> 'acffa_row'
+			)
+		);
+
+		add_settings_field(
+			'acffa_pro_cdn',
+			__( 'Enable Pro Icons?', 'acf-font-awesome' ),
+			array( $this, 'acffa_pro_cdn_cb' ),
+			'acffa',
+			'acffa_section_developers',
+			array(
+				'label_for'	=> 'acffa_pro_cdn',
+				'class'		=> 'acffa_row pro_icons'
 			)
 		);
 	}
@@ -91,7 +104,7 @@ class ACFFA_Admin
 	{
 		?>
 		<p id="<?php echo esc_attr( $args['id'] ); ?>">
-			<?php esc_html_e( 'FontAwesome underwent big changes with the release of version 5. It is best to choose a version and stick with it.', 'acf-font-awesome' ); ?><br />
+			<?php esc_html_e( 'FontAwesome underwent big changes with the release of version 5. It is best to choose a version and stick with it.', 'acf-font-awesome' ); ?><br>
 			<em><?php _e( 'Any icon selections saved prior to switching versions will need to be re-selected and re-saved after switching.', 'acf-font-awesome' ); ?></em>
 		</p>
 		<?php
@@ -109,6 +122,44 @@ class ACFFA_Admin
 			<?php esc_html_e( '5.x', 'acf-font-awesome' ); ?>
 			</option>
 		</select>
+
+
+		<?php
+	}
+
+	public function acffa_pro_cdn_cb( $args )
+	{
+		$options = get_option( 'acffa_settings' );
+		?>
+		<p id="<?php echo esc_attr( $args['id'] ); ?>">
+			<?php _e( 'If you have a FontAwesome Pro license, check the box below to enable the pro icons.', 'acf-font-awesome' ); ?><br>
+			<em><?php _e( 'NOTE: You MUST add this domain in your FontAwesome "Pro CDN Domains" in order for this to work!', 'acf-font-awesome' ); ?></em>
+		</p>
+		<br>
+		<p>
+			<input type="checkbox" value="1" id="<?php echo esc_attr( $args['label_for'] ); ?>" name="acffa_settings[<?php echo esc_attr( $args['label_for'] ); ?>]" <?php echo isset( $options[ $args[ 'label_for'] ] ) ? ( checked( $options[ $args[ 'label_for'] ] ) ) : ( '' ); ?> />
+			<label for="<?php echo esc_attr( $args['label_for'] ); ?>"><?php _e( 'I have enabled this domain for CDN use. Turn on the pro icons!', 'acf-font-awesome' ); ?></label>
+		</p>
+		<script>
+			function evaluate_pro_visibility() {
+				var selected_major_version = jQuery('#acffa_major_version').val();
+
+				if ( 5 == selected_major_version ) {
+					jQuery('.acffa_row.pro_icons').show();
+				} else {
+					jQuery('.acffa_row.pro_icons').hide();
+					jQuery('#pro_icons').prop( 'checked', false );
+				}
+			}
+
+			jQuery(document).ready( function() {
+				evaluate_pro_visibility();
+			});
+
+			jQuery('#acffa_major_version').on( 'change', function() {
+				evaluate_pro_visibility();
+			});
+		</script>
 		<?php
 	}
 

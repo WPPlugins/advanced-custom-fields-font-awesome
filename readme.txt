@@ -51,6 +51,9 @@ This ACF field type is compatible with:
 
 == Changelog ==
 
+= 3.0.0-beta2 =
+* Adding support for FontAwesome Pro icons
+
 = 3.0.0-beta1 =
 * Adding support for new FontAwesome 5.x free icon set
 * Adding new FontAwesome Settings admin menu under the ACF primary menu area for global configuration options.
@@ -164,6 +167,9 @@ This ACF field type is compatible with:
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 3.0.0-beta2 =
+* Adding support for FontAwesome Pro icons
 
 = 3.0.0-beta1 =
 * Adding support for new FontAwesome 5.x free icon set
