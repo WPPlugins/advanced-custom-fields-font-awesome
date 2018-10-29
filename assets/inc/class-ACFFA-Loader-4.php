@@ -21,9 +21,11 @@ class ACFFA_Loader_4
 	public $cdn_filepath		= '/css/font-awesome.min.css';
 	public $override_version	= false;
 	public $current_version		= false;
+	private $version;
 
 	public function init()
 	{
+		$this->version 			= 'v' . ACFFA_MAJOR_VERSION;
 		$this->api_endpoint		= apply_filters( 'ACFFA_api_endpoint', $this->api_endpoint );
 		$this->cdn_baseurl		= apply_filters( 'ACFFA_cdn_baseurl', $this->cdn_baseurl );
 		$this->cdn_filepath		= apply_filters( 'ACFFA_cdn_filepath', $this->cdn_filepath );
@@ -70,12 +72,28 @@ class ACFFA_Loader_4
    		$results = array();
    		$s = null;
 
+   		if ( 'default_value' != $options['field_key'] ) {
+			$field = acf_get_field( $options['field_key'] );
+			if ( ! $field ) return false;
+   		}
+
 		if ( $options['s'] !== '' ) {
 			$s = strval( $options['s'] );
 			$s = wp_unslash( $s );
 		}
 
-		$fa_icons = apply_filters( 'ACFFA_get_icons', array() );
+		if ( isset( $field['icon_sets'] ) // Make sure we have an icon set
+			 && in_array( 'custom', $field['icon_sets'] ) // Make sure that icon set is 'custom'
+			 && isset( $field['custom_icon_set'] ) // Make sure a custom set has been chosen
+			 && stristr( $field['custom_icon_set'], 'ACFFA_custom_icon_list_' . $this->version ) // Make sure that chosen custom set matches this version of FontAwesome
+			 && $custom_icon_set = get_option( $field['custom_icon_set'] ) // Make sure we can retrieve the icon set from the DB/cache
+		) {
+			$fa_icons = array(
+				'list'	=> $custom_icon_set
+			);
+		} else {
+			$fa_icons = apply_filters( 'ACFFA_get_icons', array() );
+		}
 
 		if ( $fa_icons ) {
 			foreach( $fa_icons['list'] as $k => $v ) {
@@ -174,6 +192,8 @@ class ACFFA_Loader_4
 						update_option( 'ACFFA_icon_data', $fa_icons, false );
 					}
 				}
+			} else {
+				update_option( 'ACFFA_cdn_error', true );
 			}
 		}
 

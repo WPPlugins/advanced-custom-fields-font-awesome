@@ -9,9 +9,9 @@
 	function select2_init_args( element, parent ) {
 		return {
 			key			: $( parent ).data('key'),
-			allow_null	: $( element ).data('allow_null'),
+			allowNull	: $( element ).data('allow_null'),
 			ajax		: 1,
-			ajax_action	: 'acf/fields/font-awesome/query'
+			ajaxAction	: 'acf/fields/font-awesome/query'
 		}
 	}
 
@@ -21,7 +21,7 @@
 
 		update_preview( $select.val(), parent );
 
-		acf.select2.init( $select, select2_init_args( fa_field, parent ), $( fa_field ) );
+		acf.select2.init( $select, select2_init_args( fa_field, parent ), parent );
 	}
 
 	acf.add_action( 'select2_init', function( $input, args, settings, $field ) {
@@ -32,7 +32,6 @@
 
 	// Add our classes to FontAwesome select2 fields
 	acf.add_filter( 'select2_args', function( args, $select, settings, $field ) {
-
 		if ( $select.hasClass('select2-fontawesome') ) {
 			args.dropdownCssClass = 'fa-select2-drop fa' + ACFFA.major_version;
 			args.containerCssClass = 'fa-select2 fa' + ACFFA.major_version;
@@ -47,7 +46,26 @@
 
 		$field_objects.each( function( index, field_object ) {
 			update_preview( $( 'select.fontawesome-create', field_object ).val(), field_object );
+
+			if ( $( '.acf-field[data-name="icon_sets"] input[type="checkbox"][value="custom"]:checked', field_object ).length ) {
+				$( '.acf-field-setting-custom_icon_set', field_object ).show();
+			} else {
+				$( '.acf-field-setting-custom_icon_set', field_object ).hide();
+			}
+
 		});
+	});
+
+	// Uncheck standard icon set choices if 'custom icon set' is checked, and show the custom icon set select box
+	$( document ).on( 'change', '.acf-field[data-name="icon_sets"] input[type="checkbox"]', function() {
+		var parent = $( this ).closest('.acf-field-object-font-awesome');
+		if ( $( this ).is('[value="custom"]') && $( this ).is(':checked') ) {
+			$( 'input[type="checkbox"]:not([value="custom"])', parent ).prop('checked', false);
+			$( '.acf-field-setting-custom_icon_set', parent ).show();
+		} else {
+			$( 'input[type="checkbox"][value="custom"]', parent ).prop('checked', false);
+			$( '.acf-field-setting-custom_icon_set', parent ).hide();
+		}
 	});
 
 	// Handle new menu items with FontAwesome fields assigned to them
@@ -73,10 +91,12 @@
 	});
 
 	// Update FontAwesome field previews when value changes
-	acf.add_action( 'change', function( $input ) {
+	$( document ).on( 'select2:select', 'select.select2-fontawesome', function() {
+		var $input = $( this );
 
 		if ( $input.hasClass('fontawesome-create') ) {
 			update_preview( $input.val(), $input.closest('.acf-field-object') );
+			$('.acf-field-setting-default_label input').val( $( 'option:selected', $input ).html() );
 		}
 
 		if ( $input.hasClass('fontawesome-edit') ) {

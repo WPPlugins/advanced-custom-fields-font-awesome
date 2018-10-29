@@ -29,9 +29,11 @@ class ACFFA_Loader_5
 	private $current_version	= false;
 	private $pro_icons_enabled	= false;
 	private $active_icon_set	= false;
+	private $version;
 
 	public function init()
 	{
+		$this->version 				= 'v' . ACFFA_MAJOR_VERSION;
 		$acffa_settings				= get_option( 'acffa_settings' );
 		$this->pro_icons_enabled	= isset( $acffa_settings['acffa_pro_cdn'] ) ? true : false;
 
@@ -89,21 +91,41 @@ class ACFFA_Loader_5
 			'post_id'		=> 0,
 			's'				=> '',
 			'field_key'		=> '',
-			'paged'			=> 1
+			'paged'			=> 0
 		));
 
    		$results = array();
    		$s = null;
+
+   		if ( 'default_value' != $options['field_key'] ) {
+			$field = acf_get_field( $options['field_key'] );
+			if ( ! $field ) return false;
+   		}
 
 		if ( $options['s'] !== '' ) {
 			$s = strval( $options['s'] );
 			$s = wp_unslash( $s );
 		}
 
-		$fa_icons = apply_filters( 'ACFFA_get_icons', array() );
+		if ( isset( $field['icon_sets'] ) // Make sure we have an icon set
+			 && in_array( 'custom', $field['icon_sets'] ) // Make sure that icon set is 'custom'
+			 && isset( $field['custom_icon_set'] ) // Make sure a custom set has been chosen
+			 && stristr( $field['custom_icon_set'], 'ACFFA_custom_icon_list_' . $this->version ) // Make sure that chosen custom set matches this version of FontAwesome
+			 && $custom_icon_set = get_option( $field['custom_icon_set'] ) // Make sure we can retrieve the icon set from the DB/cache
+		) {
+			$fa_icons = array(
+				'list'	=> $custom_icon_set
+			);
+		} else {
+			$fa_icons = apply_filters( 'ACFFA_get_icons', array() );
+		}
 
 		if ( $fa_icons ) {
 			foreach ( $fa_icons['list'] as $prefix => $icons ) {
+				if ( ! empty( $field['icon_sets'] ) && ! in_array( 'custom', $field['icon_sets'] ) && ! in_array( $prefix, $field['icon_sets'] ) ) {
+					continue;
+				}
+
 				$prefix_icons = array();
 				foreach( $icons as $k => $v ) {
 
@@ -190,7 +212,7 @@ class ACFFA_Loader_5
 		$fa_icons = get_option( 'ACFFA_icon_data' );
 
 		if ( empty( $fa_icons ) || ! isset( $fa_icons[ $this->current_version ] ) || ! $this->active_icon_set || ( $this->pro_icons_enabled && 'pro' !== $this->active_icon_set ) || ( ! $this->pro_icons_enabled && 'free' !== $this->active_icon_set ) ) {
-			$remote_get		= wp_remote_get( $this->manifest_url );
+			$remote_get	= wp_remote_get( $this->manifest_url );
 
 			if ( ! is_wp_error( $remote_get ) && isset( $remote_get['response']['code'] ) && '200' == $remote_get['response']['code'] ) {
 				$response = wp_remote_retrieve_body( $remote_get );
@@ -209,13 +231,13 @@ class ACFFA_Loader_5
 
 							$active_set = ( $this->pro_icons_enabled ) ? 'pro' : 'free';
 
-							update_option( 'ACFFA_icon_data', $fa_icons, true );
-							update_option( 'ACFFA_active_icon_set', $active_set, true );
+							update_option( 'ACFFA_icon_data', $fa_icons, false );
+							update_option( 'ACFFA_active_icon_set', $active_set, false );
 						}
 					}
 				}
 			} else {
-				// There was an error getting the icons, maybe CDN not enabled for Pro? Or CDN down?
+				update_option( 'ACFFA_cdn_error', true );
 			}
 		}
 
