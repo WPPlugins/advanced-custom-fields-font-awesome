@@ -2,7 +2,7 @@
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 4.9
+Tested up to: 5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,9 @@ This ACF field type is compatible with:
 2. Searchable list of all icons, including large live preview
 
 == Changelog ==
+
+= 2.1.2 =
+* Fixed bug where ACFFA_get_icons filter was not used in wp-admin area when retrieving icons.
 
 = 2.1.1 =
 * Fixed bug effecting any users who did not update to 2.1.0 before jsDelivr added FontAwesome 5.x to their CDN, where the 5.x icons would get loaded and break functionality
@@ -156,6 +159,9 @@ This ACF field type is compatible with:
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 2.1.2 =
+* Fixed bug where ACFFA_get_icons filter was not used in wp-admin area when retrieving icons.
 
 = 2.1.1 =
 * Fixed bug effecting any users who did not update to 2.1.0 before jsDelivr added FontAwesome 5.x to their CDN, where the 5.x icons would get loaded and break functionality
