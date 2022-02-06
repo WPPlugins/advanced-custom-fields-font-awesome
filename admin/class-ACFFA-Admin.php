@@ -90,11 +90,13 @@ class ACFFA_Admin
 
 	public function add_settings_page()
 	{
+		$capability = apply_filters( 'acf/settings/capability', 'manage_options' );
+
 		add_submenu_page(
 			'edit.php?post_type=acf-field-group',
 			'FontAwesome Settings',
 			'FontAwesome Settings',
-			'manage_options',
+			$capability,
 			'fontawesome-settings',
 			array( $this, 'fontawesome_settings' )
 		);
@@ -340,7 +342,7 @@ class ACFFA_Admin
 							echo '<optgroup label="' . $optgroup_label . '">';
 
 							foreach( $icons as $k => $v ) {
-								$value = str_replace( array( 'fas ', 'far ', 'fab ', 'fal ', 'fa-' ), '', $k );
+								$value = str_replace( array( 'fas ', 'far ', 'fab ', 'fal ', 'fad ', 'fa-' ), '', $k );
 								?>
 								<option value="<?php echo $k; ?>"><?php echo $value; ?></option>
 								<?php
@@ -516,7 +518,7 @@ class ACFFA_Admin
 		update_option( 'ACFFA_custom_icon_sets_list', $icon_sets_list, false );
 	}
 
-	private function remove_icon_set( $custom_icon_sets_list = false, $icon_set_name, $list_only = false )
+	private function remove_icon_set( $custom_icon_sets_list, $icon_set_name, $list_only = false )
 	{
 		if ( ! $custom_icon_sets_list ) {
 			$custom_icon_sets_list = get_option( 'ACFFA_custom_icon_sets_list' );
@@ -550,4 +552,4 @@ class ACFFA_Admin
 
 }
 
-add_action( 'after_setup_theme', array( new ACFFA_Admin, 'init' ), 10 );
+add_action( 'acf/init', array( new ACFFA_Admin, 'init' ), 10 );

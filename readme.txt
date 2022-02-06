@@ -2,8 +2,8 @@
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 4.9
-Stable tag: 2.1.2
+Tested up to: 5.8
+Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -42,7 +42,7 @@ This ACF field type is compatible with:
 * **ACFFA_admin_enqueue_fa**: Return false to stop enqueueing FontAwesome in the admin area. Useful if you already have FontAwesome enqueued by some other means.
 * **ACFFA_get_icons**: Filter the array of icons and icon details loaded from the database
 * **ACFFA_get_fa_url**: Filter the URL used for enqueuing FontAwesome in the frontend and admin areas of the site.
-* **ACFFA_override_major_version**: Filter to manually set the 'major' version of FontAwesome to load (accepts either 4, or 5).
+* **ACFFA_override_major_version**: Filter to manually set the 'major' version of FontAwesome to load (accepts either 4, or 5). NOTE: This filter must be registered before any calls to ACF get_field() function are made.
 
 == Screenshots ==
 
@@ -51,7 +51,25 @@ This ACF field type is compatible with:
 
 == Changelog ==
 
+= 3.1.2 =
+* Fixed compatibility issue with ACF 5.10+
+* Fixed deprecated warnings in PHP 8, thanks to Levi Cole for the pull request
+
+= 3.1.1 =
+* Fixed bug where Duotone icons were not available to existing users of this plugin due to cached versions of the icons from before this plugin could properly parse the duotone icons.
+
+= 3.1.0 =
+* Added support for new FontAwesome Duotone icons (FontAwesome Pro subscription required)
+* Added support for ACF 'acf/settings/capability' filter on the settings page
+
+= 3.0.2 =
+* Fixed bug causing PHP warning of undefined constant
+
+= 3.0.1 =
+* Fixed bug where the FontAwesome field would not successfully register on sites which force ACF to initialize itself early (usually by calling get_field function in the theme functions.php file)
+
 = 3.0.0 =
+* NOTE: When upgrading from a previous version of this plugin, the FontAwesome 'major version' will remain at v4 to stay compatible with existing integrations. *HOWEVER* if you are upgrading from a very old version of this plugin, it may not be possible to detect the former installation, and you will need to manually configure this plugin to use FontAwesome v4 in the new settings admin area.
 * Added support for new FontAwesome 5.x free and pro icon sets
 * Added new 'custom icon set' builder which allows FontAwesome ACF fields to be created with a limited set of icons individually selected from the full list of FontAwesome icons. Example: Create a custom icon set limited to just the social media brand icons
 * Added new field options to to limit which of the icon sets ( Brands, Regular, Lite, Solid ) you want to allow in the field (applies to FontAwesome v5 only)
@@ -168,6 +186,23 @@ This ACF field type is compatible with:
 
 == Upgrade Notice ==
 
+= 3.1.2 =
+* Fixed compatibility issue with ACF 5.10+
+* Fixed deprecated warnings in PHP 8, thanks to Levi Cole for the pull request
+
+= 3.1.1 =
+* Fixed bug where Duotone icons were not available to existing users of this plugin due to cached versions of the icons from before this plugin could properly parse the duotone icons.
+
+= 3.1.0 =
+* Added support for new FontAwesome Duotone icons (FontAwesome Pro subscription required)
+* Added support for ACF 'acf/settings/capability' filter on the settings page
+
+= 3.0.2 =
+* Fixed bug causing PHP warning of undefined constant
+
+= 3.0.1 =
+* Fixed bug where the FontAwesome field would not successfully register on sites which force ACF to initialize itself early (usually by calling get_field function in the theme functions.php file)
+
 = 3.0.0 =
 * NOTE: When upgrading from a previous version of this plugin, the FontAwesome 'major version' will remain at v4 to stay compatible with existing integrations. *HOWEVER* if you are upgrading from a very old version of this plugin, it may not be possible to detect the former installation, and you will need to manually configure this plugin to use FontAwesome v4 in the new settings admin area.
 * Added support for new FontAwesome 5.x free and pro icon sets
@@ -176,44 +211,3 @@ This ACF field type is compatible with:
 * Adding new FontAwesome Settings admin menu under the ACF primary menu area for global configuration options.
 * Page load performance improvements (don't load icons in field constructor)
 * Removing support for ACF v4 now that v5 is out with a free version
-
-= 2.1.2 =
-* Fixed bug where ACFFA_get_icons filter was not used in wp-admin area when retrieving icons.
-
-= 2.1.1 =
-* Fixed bug effecting any users who did not update to 2.1.0 before jsDelivr added FontAwesome 5.x to their CDN, where the 5.x icons would get loaded and break functionality
-
-= 2.1.0 =
-* Preventing any automatic updates to version 5.x of FontAwesome that could break plugin functionality and result in broken icons on sites currently using 4.x FontAwesome icons.
-
-= 2.0.9 =
-* Fixed bug effecting null value fields created in 1.x of this plugin would return a string of 'null' instead of boolean false when used in 2.x versions of this plugin.
-
-= 2.0.8 =
-* Fixed bug where fields marked to 'allow null' in acf v5 did not show the (x) to remove the selected option on the field
-
-= 2.0.7 =
-* Fixed bug with FA fields assigned to menu items + further refactoring of JS for ACF v5
-
-= 2.0.6 =
-* Refactored JS to simplify codebase and fix bugs where Chosen or Select2 fields would not initialize in a variety of field/sub-field configurations and display options.
-
-= 2.0.5 =
-* Fixed bug with ACF tabs + FontAwesome fields where Chosen/Select2 would not initialize beyond the first tab shown
-
-= 2.0.4 =
-* Added filter (ACFFA_always_enqueue_fa) to allow FontAwesome to always be enqueued on your sites frontend, even if no ACF FontAwesome fields are in use on the page.
-
-= 2.0.3 =
-* Fixed bug where a field set to return 'Icon Object' would instead return an array
-
-= 2.0.2 =
-* Fixed bug effecting Select fields when used along with a Font Awesome field in a repeater (ACF v5)
-
-= 2.0.1 =
-* Fixed bug causing incompatibilities with ACF Clone fields (ACF v5)
-* Fixed bug where default icons could not be unselected when creating FontAwesome fields (ACF v5)
-
-= 2.0.0 =
-* Total rewrite of plugin to simplify codebase and better adhere to WordPress and Advanced Custom Fields coding standards and best practices
-* Added option to disable the larger icon preview displayed with the FontAwesome select fields
