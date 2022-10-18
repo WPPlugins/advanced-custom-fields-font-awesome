@@ -3,7 +3,7 @@
 Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
-Tested up to: 5.9
+Tested up to: 6.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -81,6 +81,14 @@ This notification message is filterable so you can customize it to better repres
 2. Searchable list of all icons, including large live preview
 
 == Changelog ==
+
+= 4.0.3 =
+* Automatically refresh 4.x and 5.x icon caches when saving the settings
+* Additional strings for translation
+
+= 4.0.2 =
+* Fixed bug where FontAwesome 5.x icon data was improperly loading FontAwesome 6.x data
+* Removed some dependancies on jsDelivr for FontAwesome 5.x icon data
 
 = 4.0.1 =
 * Fixed bug where FontAwesome settings page would not properly load CSS/JS assets on internationalized WordPress installations.
@@ -227,6 +235,14 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.0.3 =
+* Automatically refresh 4.x and 5.x icon caches when saving the settings
+* Additional strings for translation
+
+= 4.0.2 =
+* Fixed bug where FontAwesome 5.x icon data was improperly loading FontAwesome 6.x data
+* Removed some dependancies on jsDelivr for FontAwesome 5.x icon data
 
 = 4.0.1 =
 * Fixed bug where FontAwesome settings page would not properly load CSS/JS assets on internationalized WordPress installations.
