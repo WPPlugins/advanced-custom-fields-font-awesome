@@ -4,7 +4,7 @@ Contributors: mattkeys
 Tags: Advanced Custom Fields, ACF, Font Awesome, FontAwesome
 Requires at least: 3.5
 Tested up to: 6.2
-Stable tag: 4.0.5
+Stable tag: 4.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,6 +81,9 @@ This notification message is filterable so you can customize it to better repres
 2. Searchable list of all icons, including large live preview
 
 == Changelog ==
+
+= 4.0.6 =
+* Fixed php 8.2 related warning
 
 = 4.0.5 =
 * Fixed compatibility issue with ACF 6.1+ causing this plugins settings page to break
@@ -242,6 +245,9 @@ This notification message is filterable so you can customize it to better repres
 * Initial Release.
 
 == Upgrade Notice ==
+
+= 4.0.6 =
+* Fixed php 8.2 related warning
 
 = 4.0.5 =
 * Fixed compatibility issue with ACF 6.1+ causing this plugins settings page to break
