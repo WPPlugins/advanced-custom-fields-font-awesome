@@ -1,7 +1,8 @@
 <?php
 /**
  * =======================================
- * Advanced Custom Fields Font Awesome Loader
+ * Advanced Custom Fields Font Awesome Loader 4
+ * Used with FontAwesome 4.x icon set
  * =======================================
  * 
  * 
@@ -12,31 +13,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class ACFFAL
+class ACFFA_Loader_4
 {
-
-	public $api_endpoint		= 'https://data.jsdelivr.com/v1/package/gh/FortAwesome/Font-Awesome';
+	public $latest_version		= '4.7.0';
 	public $cdn_baseurl			= 'https://cdn.jsdelivr.net/fontawesome/';
 	public $cdn_filepath		= '/css/font-awesome.min.css';
-	public $override_version	= false;
 	public $current_version		= false;
+	private $version;
 
-	public function init()
+	public function __construct()
 	{
-		$this->api_endpoint		= apply_filters( 'ACFFA_api_endpoint', $this->api_endpoint );
+		$this->version 			= 'v' . ACFFA_MAJOR_VERSION;
 		$this->cdn_baseurl		= apply_filters( 'ACFFA_cdn_baseurl', $this->cdn_baseurl );
 		$this->cdn_filepath		= apply_filters( 'ACFFA_cdn_filepath', $this->cdn_filepath );
-		$this->override_version	= apply_filters( 'ACFFA_override_version', false );
 
 		$this->current_version	= get_option( 'ACFFA_current_version' );
 
-		if ( $this->override_version ) {
-			$this->current_version = $this->override_version;
-		} else if ( ! $this->current_version ) {
-			$this->current_version = $this->check_latest_version();
+		if ( ! $this->current_version || version_compare( $this->current_version, '5.0.0', '>=' )  ) {
+			$this->current_version = $this->latest_version;
 		}
 
-		if ( ! $this->override_version && ! wp_next_scheduled ( 'ACFFA_refresh_latest_icons' ) ) {
+		if ( ! wp_next_scheduled ( 'ACFFA_refresh_latest_icons' ) ) {
 			wp_schedule_event( time(), 'daily', 'ACFFA_refresh_latest_icons' );
 		}
 
@@ -69,12 +66,28 @@ class ACFFAL
    		$results = array();
    		$s = null;
 
+   		if ( 'default_value' != $options['field_key'] ) {
+			$field = acf_get_field( $options['field_key'] );
+			if ( ! $field ) return false;
+   		}
+
 		if ( $options['s'] !== '' ) {
 			$s = strval( $options['s'] );
 			$s = wp_unslash( $s );
 		}
 
-		$fa_icons = $this->get_icons();
+		if ( isset( $field['icon_sets'] ) // Make sure we have an icon set
+			 && in_array( 'custom', $field['icon_sets'] ) // Make sure that icon set is 'custom'
+			 && isset( $field['custom_icon_set'] ) // Make sure a custom set has been chosen
+			 && stristr( $field['custom_icon_set'], 'ACFFA_custom_icon_list_' . $this->version ) // Make sure that chosen custom set matches this version of FontAwesome
+			 && $custom_icon_set = get_option( $field['custom_icon_set'] ) // Make sure we can retrieve the icon set from the DB/cache
+		) {
+			$fa_icons = array(
+				'list'	=> $custom_icon_set
+			);
+		} else {
+			$fa_icons = apply_filters( 'ACFFA_get_icons', array() );
+		}
 
 		if ( $fa_icons ) {
 			foreach( $fa_icons['list'] as $k => $v ) {
@@ -101,11 +114,7 @@ class ACFFAL
 
 	public function refresh_latest_icons()
 	{
-		if ( $this->override_version ) {
-			return;
-		}
-
-		$latest_version = $this->check_latest_version( false );
+		$latest_version = $this->latest_version;
 
 		if ( ! $this->current_version || ! $latest_version ) {
 			return;
@@ -119,33 +128,7 @@ class ACFFAL
 		}
 	}
 
-	private function check_latest_version( $update_option = true )
-	{
-		$latest_version = 'latest';
-
-		$remote_get = wp_remote_get( $this->api_endpoint );
-
-		if ( ! is_wp_error( $remote_get ) ) {
-			$response_json = wp_remote_retrieve_body( $remote_get );
-
-			if ( $response_json ) {
-				$response = json_decode( $response_json );
-
-				if ( isset( $response->versions ) && ! empty( $response->versions ) ) {
-					$latest_version = max( $response->versions );
-					$latest_version = ltrim( $latest_version, 'v' );
-
-					if ( $update_option ) {
-						update_option( 'ACFFA_current_version', $latest_version, false );
-					}
-				}
-			}
-		}
-
-		return $latest_version;
-	}
-
-	public function get_icons()
+	public function get_icons( $icons = array() )
 	{
 		$fa_icons = get_option( 'ACFFA_icon_data' );
 
@@ -167,13 +150,15 @@ class ACFFAL
 						update_option( 'ACFFA_icon_data', $fa_icons, false );
 					}
 				}
+			} else {
+				update_option( 'ACFFA_cdn_error', true );
 			}
 		}
 
 		if ( isset( $fa_icons[ $this->current_version ] ) ) {
 			return $fa_icons[ $this->current_version ];
 		} else {
-			return false;
+			return array();
 		}
 	}
 
@@ -217,8 +202,6 @@ class ACFFAL
 			$icons['list'][ $class ] = $unicode . ' ' . $class_nicename;
 
 			$icons['details'][ $class ] = array(
-				'element'	=> $element,
-				'class'		=> $class,
 				'hex'		=> $hex,
 				'unicode'	=> $unicode
 			);
@@ -226,11 +209,8 @@ class ACFFAL
 
 		ksort( $icons['list'] );
 
-		$icons['list'] = array( null => '' ) + $icons['list'];
-
 		return $icons;
 	}
 }
 
-add_action(	'acf/include_field_types', array( new ACFFAL, 'init' ), 5 ); // v5
-add_action(	'acf/register_fields', array( new ACFFAL, 'init' ), 5 ); // v4
+new ACFFA_Loader_4();

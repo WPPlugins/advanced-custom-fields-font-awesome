@@ -1,16 +1,17 @@
 (function($){
 	
 	function update_preview( value, parent ) {
-		$( '.acf-field-setting-fa_live_preview .acf-input', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
-		$( '.icon_preview', parent ).html( '<i class="fa ' + value + '" aria-hidden="true"></i>' );
+		var class_prefix = ( ACFFA.major_version >= 5 ) ? '' : 'fa ';
+		$( '.acf-field-setting-fa_live_preview .acf-input', parent ).html( acf.escHtml('<i class="' + class_prefix + value + '" aria-hidden="true"></i>') );
+		$( '.icon_preview', parent ).html( acf.escHtml('<i class="' + class_prefix + value + '" aria-hidden="true"></i>') );
 	}
 
-	function select2_init_args( element ) {
+	function select2_init_args( element, parent ) {
 		return {
-			key			: $( element ).data('key'),
-			allow_null	: $( 'select', element ).data('allow_null'),
+			key			: $( parent ).data('key'),
+			allowNull	: $( element ).data('allow_null'),
 			ajax		: 1,
-			ajax_action	: 'acf/fields/font-awesome/query'
+			ajaxAction	: 'acf/fields/font-awesome/query'
 		}
 	}
 
@@ -20,7 +21,7 @@
 
 		update_preview( $select.val(), parent );
 
-		acf.select2.init( $select, select2_init_args( fa_field ), $( fa_field ) );
+		acf.select2.init( $select, select2_init_args( fa_field, parent ), parent );
 	}
 
 	acf.add_action( 'select2_init', function( $input, args, settings, $field ) {
@@ -29,12 +30,19 @@
 		}
 	});
 
-	// Add our classes to FontAwesome select2 fields
+	// Adjust FontAwesome select2 field settings
 	acf.add_filter( 'select2_args', function( args, $select, settings, $field ) {
-
 		if ( $select.hasClass('select2-fontawesome') ) {
-			args.dropdownCssClass = 'fa-select2-drop';
-			args.containerCssClass = 'fa-select2';
+			if ( 4 == ACFFA.major_version ) {
+				args.dropdownCssClass = 'fa-select2-drop fa4';
+				args.containerCssClass = 'fa-select2 fa4'	
+			}
+			args.escapeMarkup = function( markup ) {
+				if (typeof markup !== 'string') {
+					return markup;
+				}
+				return acf.escHtml( markup ); 
+			}
 		}
 
 		return args;
@@ -46,7 +54,26 @@
 
 		$field_objects.each( function( index, field_object ) {
 			update_preview( $( 'select.fontawesome-create', field_object ).val(), field_object );
+
+			if ( $( '.acf-field[data-name="icon_sets"] input[type="checkbox"][value="custom"]:checked', field_object ).length ) {
+				$( '.acf-field-setting-custom_icon_set', field_object ).show();
+			} else {
+				$( '.acf-field-setting-custom_icon_set', field_object ).hide();
+			}
+
 		});
+	});
+
+	// Uncheck standard icon set choices if 'custom icon set' is checked, and show the custom icon set select box
+	$( document ).on( 'change', '.acf-field[data-name="icon_sets"] input[type="checkbox"]', function() {
+		var parent = $( this ).closest('.acf-field-object-font-awesome');
+		if ( $( this ).is('[value="custom"]') && $( this ).is(':checked') ) {
+			$( 'input[type="checkbox"]:not([value="custom"])', parent ).prop('checked', false);
+			$( '.acf-field-setting-custom_icon_set', parent ).show();
+		} else {
+			$( 'input[type="checkbox"][value="custom"]', parent ).prop('checked', false);
+			$( '.acf-field-setting-custom_icon_set', parent ).hide();
+		}
 	});
 
 	// Handle new menu items with FontAwesome fields assigned to them
@@ -72,10 +99,12 @@
 	});
 
 	// Update FontAwesome field previews when value changes
-	acf.add_action( 'change', function( $input ) {
+	$( document ).on( 'select2:select', 'select.select2-fontawesome', function() {
+		var $input = $( this );
 
 		if ( $input.hasClass('fontawesome-create') ) {
 			update_preview( $input.val(), $input.closest('.acf-field-object') );
+			$('.acf-field-setting-default_label input').val( $( 'option:selected', $input ).html() );
 		}
 
 		if ( $input.hasClass('fontawesome-edit') ) {
