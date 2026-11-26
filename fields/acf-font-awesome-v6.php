@@ -49,7 +49,7 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			if ( apply_filters( 'ACFFA_show_fontawesome_pro_blurbs', true ) ) {
 				acf_render_field_setting( $field, [
 					'label'			=> __( 'Get FontAwesome Pro', 'acf-font-awesome' ),
-					'message'		=> '<p>' . __( 'Support this plugin and get more icons across more styles plus helpful services, regular updates, a lifetime license, and actual human support.', 'acf-font-awesome' ) . '</p>' . '<a class="get-acfpro-btn" target="_blank" href="https://fontawesome.com/referral?a=0032f3e781"><i class="fa-solid fa-carrot"></i>' . __( 'Upgrade to Font Awesome Pro!', 'acf-font-awesome' ) . '</a>',
+					'message'		=> '<p>' . __( 'Support this plugin and get more icons across more styles plus helpful services, regular updates, a lifetime license, and actual human support.', 'acf-font-awesome' ) . '</p>' . '<a class="get-acfpro-btn" target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256"><i class="fa-solid fa-carrot"></i>' . __( 'Upgrade to Font Awesome Pro!', 'acf-font-awesome' ) . '</a>',
 					'type'			=> 'message',
 					'name'			=> 'get-fontawesome-pro',
 					'class'			=> 'get-fontawesome-pro'
@@ -65,16 +65,16 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 
 			$icon_sets_args['choices'] = [
 				'solid'					=> __( 'Solid', 'acf-font-awesome' ),
-				'sharp_solid'			=> __( 'Solid (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_solid'			=> __( 'Solid (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
 				'regular'				=> __( 'Regular', 'acf-font-awesome' ),
-				'sharp_regular'			=> __( 'Regular (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'light'					=> __( 'Light', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'sharp_light'			=> __( 'Light (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'thin'					=> __( 'Thin', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'sharp_thin'			=> __( 'Thin (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'sharp-duotone_solid'	=> __( 'Duotone (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'duotone_solid'			=> __( 'Duotone', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
-				'fak'					=> __( 'Uploaded Icons', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=0032f3e781">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_regular'			=> __( 'Regular (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'light'					=> __( 'Light', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_light'			=> __( 'Light (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'thin'					=> __( 'Thin', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp_thin'			=> __( 'Thin (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'sharp-duotone_solid'	=> __( 'Duotone (Sharp)', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'duotone_solid'			=> __( 'Duotone', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
+				'fak'					=> __( 'Uploaded Icons', 'acf-font-awesome' ) . ' (' . '<a target="_blank" href="https://fontawesome.com/referral?a=f4be3e1256">' . __( 'FontAwesome Pro License Required', 'acf-font-awesome' ) . '</a>)',
 				'brands'				=> __( 'Brands', 'acf-font-awesome' ),
 				'custom'				=> __( 'Custom Icon Set', 'acf-font-awesome' )
 			];
@@ -246,17 +246,17 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			if ( $v5_icon_preselected ) :
 				$previous_icon_info = $this->get_previous_icon_info( $select_value );
 				?>
-				<div class="v5-compat-message" aria-label="<?php _e( 'This FontAwesome v5 Pro icon cannot be automatically translated to its v6 equivalent and will need to be reselected before saving this post/page.', 'acf-font-awesome' ); ?>" data-microtip-size="large" data-microtip-position="top" role="tooltip">
-					<?php echo sprintf (__( 'Please reselect your FontAwesome Icon.', 'acf-font-awesome' ), 'SOLID', 'COFFEE' ); ?> <i class="fas fa-question-circle"></i>
+				<div class="v5-compat-message" aria-label="<?php esc_html_e( 'This FontAwesome v5 Pro icon cannot be automatically translated to its v6 equivalent and will need to be reselected before saving this post/page.', 'acf-font-awesome' ); ?>" data-microtip-size="large" data-microtip-position="top" role="tooltip">
+					<?php echo sprintf (esc_html__( 'Please reselect your FontAwesome Icon.', 'acf-font-awesome' ), 'SOLID', 'COFFEE' ); ?> <i class="fas fa-question-circle"></i>
 					<?php
 						if ( isset( $previous_icon_info['style'] ) && ! empty( $previous_icon_info['style'] ) ) :
 							?>
-							<em><?php _e( 'Style:', 'acf-font-awesome' ); ?></em> <strong><?php echo $previous_icon_info['style']; ?></strong>
+							<em><?php esc_html_e( 'Style:', 'acf-font-awesome' ); ?></em> <strong><?php echo esc_html( $previous_icon_info['style'] ); ?></strong>
 							<?php
 						endif;
 						if ( isset( $previous_icon_info['name'] ) && ! empty( $previous_icon_info['name'] ) ) :
 							?>
-							<em><?php _e( 'Name:', 'acf-font-awesome' ); ?></em> <strong><?php echo $previous_icon_info['name']; ?></strong>
+							<em><?php esc_html_e( 'Name:', 'acf-font-awesome' ); ?></em> <strong><?php echo esc_html( $previous_icon_info['name'] ); ?></strong>
 							<?php
 						endif;
 					?>
@@ -315,6 +315,69 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			}
 		}
 	
+		/**
+		 * Restrict stored icon JSON to safe values so nothing user-supplied can break out of HTML attributes.
+		 */
+		private function sanitize_icon_json($icon_json)
+		{
+			foreach (['id', 'family', 'style'] as $key) {
+				if (isset($icon_json->$key)) {
+					$icon_json->$key = is_scalar($icon_json->$key) ? preg_replace('/[^a-z0-9_-]/i', '', (string) $icon_json->$key) : '';
+				}
+			}
+			if (isset($icon_json->label)) {
+				$icon_json->label = is_scalar($icon_json->label) ? sanitize_text_field((string) $icon_json->label) : '';
+			}
+			if (isset($icon_json->unicode)) {
+				$icon_json->unicode = is_scalar($icon_json->unicode) ? preg_replace('/[^a-f0-9]/i', '', (string) $icon_json->unicode) : '';
+			}
+			foreach (['width', 'height'] as $key) {
+				if (isset($icon_json->$key)) {
+					$icon_json->$key = is_numeric($icon_json->$key) ? $icon_json->$key + 0 : 0;
+				}
+			}
+			if (isset($icon_json->path)) {
+				$clean_path = function ($path) {
+					return is_scalar($path) ? preg_replace('/[^a-z0-9 .,+-]/i', '', (string) $path) : '';
+				};
+				$icon_json->path = is_array($icon_json->path) ? array_map($clean_path, $icon_json->path) : $clean_path($icon_json->path);
+			}
+			if (isset($icon_json->html)) {
+				$svg_attrs = ['class' => true, 'fill' => true, 'opacity' => true, 'transform' => true];
+				$icon_json->html = is_string($icon_json->html) ? wp_kses($icon_json->html, [
+					'svg'	=> $svg_attrs + ['xmlns' => true, 'viewbox' => true, 'width' => true, 'height' => true, 'aria-hidden' => true, 'role' => true, 'focusable' => true, 'data-prefix' => true, 'data-icon' => true],
+					'g'		=> $svg_attrs,
+					'path'	=> $svg_attrs + ['d' => true],
+					'title'	=> [],
+				]) : '';
+			}
+
+			return $icon_json;
+		}
+
+		public function update_value($value, $post_id, $field)
+		{
+			// ACF passes slashed values for post/option saves (unslashed again on write) but unslashed values for
+			// blocks/local meta (stored as-is), so keep the slash level we were given.
+			$icon_json = is_string($value) ? json_decode($value) : null;
+			$slashed = false;
+			if (! is_object($icon_json) && is_string($value)) {
+				$icon_json = json_decode(wp_unslash($value));
+				$slashed = true;
+			}
+
+			if (is_object($icon_json)) {
+				$value = wp_json_encode($this->sanitize_icon_json($icon_json));
+				if ($slashed) {
+					$value = wp_slash($value);
+				}
+			} elseif (is_string($value)) {
+				$value = preg_replace('/[^a-z0-9 _-]/i', '', $value);
+			}
+
+			return $value;
+		}
+
 		public function format_value( $value, $post_id, $field )
 		{
 			if ( 'null' == $value ) {
@@ -326,15 +389,20 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 			}
 
 			$icon_json = json_decode( $value );
+			if (! is_object($icon_json)) {
+				// Values saved by 6.2.1 in blocks/local meta were stored with an extra layer of slashes.
+				$icon_json = json_decode(wp_unslash($value));
+			}
 
 			if ( is_object( $icon_json ) ) {
+				$icon_json = $this->sanitize_icon_json($icon_json);
 				$family = isset( $icon_json->family ) ? $icon_json->family : apply_filters( 'ACFFA_default_family_by_style', 'classic', $icon_json->style );
-				$class	= 'fa-' . $family . ' fa-' . $icon_json->style . ' fa-' . $icon_json->id;
-				$prefix	= 'fa-' . $family . ' fa-' . $icon_json->style;
+				$class = 'fa-' . esc_attr($family) . ' fa-' . esc_attr($icon_json->style) . ' fa-' . esc_attr($icon_json->id);
+				$prefix	= 'fa-' . esc_attr($family) . ' fa-' . esc_attr($icon_json->style);
 
 				switch ( $field['save_format'] ) {
 					case 'element':
-						$value = '<i class="' . $class . '" aria-hidden="true"></i>';
+						$value = '<i class="' . esc_attr($class) . '" aria-hidden="true"></i>';
 						break;
 
 					case 'unicode':
@@ -347,14 +415,14 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 
 					case 'object':
 						$object_data = [
-							'element'	=> '<i class="' . $class . '" aria-hidden="true"></i>',
-							'class'		=> $class,
-							'id'		=> $icon_json->id,
-							'family'	=> $family,
-							'style'		=> $icon_json->style,
-							'prefix'	=> $prefix,
-							'hex'		=> '\\' . $icon_json->unicode,
-							'unicode'	=> '&#x' . $icon_json->unicode . ';'
+							'element'	=> '<i class="' . esc_attr($class) . '" aria-hidden="true"></i>',
+							'class'		=> esc_attr($class),
+							'id'		=> esc_attr($icon_json->id),
+							'family'	=> esc_attr($family),
+							'style'		=> esc_attr($icon_json->style),
+							'prefix'	=> esc_attr($prefix),
+							'hex'		=> '\\' . esc_attr($icon_json->unicode),
+							'unicode'	=> '&#x' . esc_attr($icon_json->unicode) . ';'
 						];
 
 						if ( 'fak' == $icon_json->style || 'custom' == $icon_json->style ) {
@@ -383,6 +451,8 @@ if ( ! class_exists( 'acf_field_font_awesome' ) ) :
 						break;
 				}
 			} else {
+				// Non-JSON values are legacy v4/v5 class strings (e.g. "fas fa-coffee"); strip anything that could break out of an attribute.
+				$value = preg_replace('/[^a-z0-9 _-]/i', '', (string) $value);
 				$value = apply_filters( 'ACFFA_v5_upgrade_compat_format_value', $value, $field['save_format'] );
 			}
 
